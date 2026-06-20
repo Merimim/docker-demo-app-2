@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'docker-demo-app'
-        DOCKER_TAG = ${env.BUILD_NUMBER}
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
