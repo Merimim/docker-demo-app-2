@@ -21,6 +21,7 @@ pipeline {
             steps {
                 script {
                     sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
             }
         }
@@ -41,6 +42,13 @@ pipeline {
 
             }
         }
-        
+        stage('image cleanup') {
+            steps {
+                sh '''
+                   docker images ${DOCKER_IMAGE} --format "{{.ID}}" | \
+                   grep -v latest | \
+                   xargs -r docker rmi
+                   '''}
+        }
     }
 }
