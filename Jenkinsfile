@@ -28,8 +28,8 @@ pipeline {
         stage('deploy compose file'){
             steps {
                 withCredentials ([
-                                 string(credentialid:'mongo-db-username',variable:'MONGO_DB_USERNAME'),
-                                 string(credentialid:'mongo-db-password',variable:'MONGO_DB_PASSWORD')
+                                 string(credentialsId:'mongo-db-username',variable:'MONGO_DB_USERNAME'),
+                                 string(credentialsId:'mongo-db-password',variable:'MONGO_DB_PASSWORD')
                                  ]) {
                                      sh '''
                                         export DOCKER_TAG=${DOCKER_TAG}
