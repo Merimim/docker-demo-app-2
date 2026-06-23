@@ -6,6 +6,10 @@ pipeline {
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 
+    triggers {
+        githubPush()
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -20,5 +24,23 @@ pipeline {
                 }
             }
         }
+
+        stage('deploy compose file'){
+            steps {
+                withCredentials ([
+                                 string(credentialid:'mongo-db-username',variable:'MONGO_DB_USERNAME'),
+                                 string(credentialid:'mongo-db-password',variable:'MONGO_DB_PASSWORD')
+                                 ]) {
+                                     sh '''
+                                        export DOCKER_TAG=${DOCKER_TAG}
+                                        export MONGO_DB_USERNAME=${MONGO_ADMIN}
+                                        export MONGO_DB_PWD=${MONGO_PASSWORD}
+                                        docker-compose -f compose.yaml up -d
+                                        '''
+                }
+
+            }
+        }
+        
     }
 }
