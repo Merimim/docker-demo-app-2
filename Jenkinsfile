@@ -45,9 +45,9 @@ pipeline {
         stage('image cleanup') {
             steps {
                 sh '''
-                   docker images ${DOCKER_IMAGE} --format "{{.ID}}" | \
+                   docker images ${DOCKER_IMAGE} --format "{{.Repository}}:{{.Tag}}" | \
                    grep -v latest | \
-                   xargs -r docker rmi
+                   xargs -r docker rmi -f
                    '''}
         }
     }
